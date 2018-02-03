@@ -1,0 +1,38 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        long r1 = in.nextLong();
+        long r2 = in.nextLong();
+        Map<Long,Boolean> river = new HashMap<Long,Boolean>();
+        while (true) {
+            river.put(r1,true);
+            river.put(r2,true);
+            r1 = getSum(r1);
+            r2 = getSum(r2);
+            if (river.containsKey(r1)) {System.out.println(r1);return;}
+            if (river.containsKey(r2)) {System.out.println(r2);return;}
+        }
+        // Write an action using System.out.println()
+        // To debug: System.err.println("Debug messages...");
+
+        //System.out.println("42");
+    }
+    
+    static long getSum(long num) {
+        long sum = num;
+        while (num>0) {
+            sum+=num%10;
+            num/=10;
+        }
+        return sum;
+    }
+}
