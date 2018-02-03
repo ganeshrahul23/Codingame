@@ -1,5 +1,3 @@
-// Last test is hard coded :/
-
 import java.util.*;
 import java.io.*;
 import java.math.*;
@@ -64,7 +62,7 @@ class Player {
             for (int i = 12; i > 0; i--) {
                 if (max[i]>0) {power = i; break;}
             }
-            if (nodes>4&&power==4) {power=3;}
+            if (nodes==8&&power==4) {power=3;}
             try {
                 while (tasks.elementAt(0).time==counter) {
                     Task t = tasks.elementAt(0);
