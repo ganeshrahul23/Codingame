@@ -7,230 +7,84 @@ import java.math.*;
  * the standard input according to the problem statement.
  **/
 class Solution {
-    static char location[][];
+    
+    static String[] line = new String[4];
+    
     public static void main(String args[]) {
-        location = new char[4][4];
         Scanner in = new Scanner(System.in);
-        boolean checked[][] = new boolean[4][4];
-        
-        String line1 = in.next();
-        for(int i = 0; i < 4; i++)
-        {
-            char ch = line1.charAt(i);
-            location[i][0] = ch;
-        }
-        String line2 = in.next();
-        for(int i = 0; i < 4; i++)
-        {
-            char ch = line2.charAt(i);
-            location[i][1] = ch;
-        }
-        String line3 = in.next();
-        for(int i = 0; i < 4; i++)
-        {
-            char ch = line3.charAt(i);
-            location[i][2] = ch;
-        }
-        String line4 = in.next();
-        for(int i = 0; i < 4; i++)
-        {
-            char ch = line4.charAt(i);
-            location[i][3] = ch;
+        for (int i = 0; i < 4; i++) {
+            line[i] = in.next();
         }
         int n = in.nextInt();
-        outest:
-        for (int s = 0; s < n; s++) {
+        for (int i = 0; i < n; i++) {
             String w = in.next();
-            for(int i = 0; i < 4; i++)
-            {
-                for(int j = 0; j < 4; j++)
-                {
-                    if(location[i][j]==w.charAt(0))
-                    {
-                        checked[i][j] = true;
-                        if(checkLettar(w, 1, checked, i, j))
-                        {
-                            System.out.println(true);
-                            continue outest;
-                        } 
-                        else
-                        {
-                            for(int k = 0; k < 4; k++)
-                            {
-                                for(int l = 0; l < 4; l++)
-                                {
-                                    checked[k][l] = false;   
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            System.out.println(false);
-            for(int k = 0; k < 4; k++)
-            {
-                for(int l = 0; l < 4; l++)
-                    {
-                        checked[k][l] = false;   
-                    }
-            }
+            System.out.println(found(w));
         }
     }
     
-    public static boolean checkLettar(String word, int index, boolean c[][], int s1, int s2)
-    {
-         if(s1 != 0)
-         {
-            if(location[s1 - 1][s2]==word.charAt(index))
-            {
-                c[s1 - 1][s2] = true;
-                if(index == word.length() - 1)
-                {
-                    return true;   
-                }
-                if(checkLettar(word, index + 1, c, s1 - 1, s2))
-                {
-                    return true;   
-                }
-                else
-                {
-                    c[s1 - 1][s2] = false;   
+    public static boolean found(String word) {
+        char ch = word.charAt(0);
+        boolean used[][] = new boolean[4][4];
+        for (int i=0;i<4;i++) {
+            for (int j=0;j<4;j++) {
+                if (line[i].charAt(j)==ch) {
+                    used[i][j]=true;
+                    if(find(word,1,i,j,used)) return true;
+                    used[i][j]=false;
                 }
             }
-         }
-         if(s1 != 3)
-         {
-            if(location[s1 + 1][s2]==word.charAt(index))
-            {
-                 c[s1 + 1][s2] = true;
-                if(index == word.length() - 1)
-                {
-                    return true;   
-                }
-                if(checkLettar(word, index + 1, c, s1 + 1, s2))
-                {
-                    return true;   
-                }
-                else
-                {
-                    c[s1 + 1][s2] = false;   
-                }
+        }
+        return false;
+    }
+    
+    public static boolean find(String word,int index,int i,int j,boolean[][] used) {
+        if (index<word.length()) {
+            char ch = word.charAt(index);
+            boolean found = false;
+            int X = j-1;
+            int Y = i-1;
+            for (int k=0;k<2;k++) {
+                X++;
+                try {
+                    if (line[Y].charAt(X)==ch && !used[Y][X]) {
+                        used[Y][X]=true;
+                        if (find(word,index+1,Y,X,used)) return true;
+                        used[Y][X]=false;
+                    }
+                } catch (Exception e) {}
             }
-         }
-         if(s2 != 0)
-         {
-            if(location[s1][s2 - 1]==word.charAt(index))
-            {
-                 c[s1][s2-1] = true;
-                if(index == word.length() - 1)
-                {
-                    return true;   
-                }
-                if(checkLettar(word, index + 1, c, s1, s2-1))
-                {
-                    return true;   
-                }
-                else
-                {
-                    c[s1][s2-1] = false;   
-                }
+            for (int k=0;k<2;k++) {
+                Y++;
+                try {
+                    if (line[Y].charAt(X)==ch && !used[Y][X]) {
+                        used[Y][X]=true;
+                        if (find(word,index+1,Y,X,used)) return true;
+                        used[Y][X]=false;
+                    }
+                } catch (Exception e) {}
             }
-         }
-         if(s2 != 3)
-         {
-            if(location[s1][s2+1]==word.charAt(index))
-            {
-                 c[s1][s2+1] = true;
-                if(index == word.length() - 1)
-                {
-                    return true;   
-                }
-                if(checkLettar(word, index + 1, c, s1, s2+1))
-                {
-                    return true;   
-                }
-                else
-                {
-                    c[s1][s2+1] = false;   
-                }
+            for (int k=0;k<2;k++) {
+                X--;
+                try {
+                    if (line[Y].charAt(X)==ch && !used[Y][X]) {
+                        used[Y][X]=true;
+                        if (find(word,index+1,Y,X,used)) return true;
+                        used[Y][X]=false;
+                    }
+                } catch (Exception e) {}
             }
-         }
-         if(s1 != 0 && s2 != 0)
-         {
-            if(location[s1 - 1][s2 - 1]==word.charAt(index))
-            {
-                 c[s1 - 1][s2 - 1] = true;
-                if(index == word.length() - 1)
-                {
-                    return true;   
-                }
-                if(checkLettar(word, index + 1, c, s1 - 1, s2 - 1))
-                {
-                    return true;   
-                }
-                else
-                {
-                    c[s1 - 1][s2 - 1] = false;   
-                }
+            for (int k=0;k<2;k++) {
+                Y--;
+                try {
+                    if (line[Y].charAt(X)==ch && !used[Y][X]) {
+                        used[Y][X]=true;
+                        if (find(word,index+1,Y,X,used)) return true;
+                        used[Y][X]=false;
+                    }
+                } catch (Exception e) {}
             }
-         }
-         if(s1 != 0 && s2 != 3)
-         {
-            if(location[s1 - 1][s2 + 1]==word.charAt(index))
-            {
-                 c[s1 - 1][s2 + 1] = true;
-                if(index == word.length() - 1)
-                {
-                    return true;   
-                }
-                if(checkLettar(word, index + 1, c, s1 - 1, s2 + 1))
-                {
-                    return true;   
-                }
-                else
-                {
-                    c[s1 - 1][s2 + 1] = false;   
-                }
-            }
-         }
-         if(s1 != 3 && s2 != 0)
-         {
-            if(location[s1+1][s2-1]==word.charAt(index))
-            {
-                 c[s1 + 1][s2 - 1] = true;
-                if(index == word.length() - 1)
-                {
-                    return true;   
-                }
-                if(checkLettar(word, index + 1, c, s1 + 1, s2 - 1))
-                {
-                    return true;   
-                }
-                else
-                {
-                    c[s1 + 1][s2 - 1] = false;   
-                }
-            }
-         }
-          if(s1 != 3 && s2 != 3)
-         {
-            if(location[s1+1][s2+1]==word.charAt(index))
-            {
-                 c[s1 + 1][s2 + 1] = true;
-                if(index == word.length() - 1)
-                {
-                    return true;   
-                }
-                if(checkLettar(word, index + 1, c, s1 + 1, s2 + 1))
-                {
-                    return true;   
-                }
-                else
-                {
-                    c[s1 + 1][s2 + 1] = false;   
-                }
-            }
-         }
-         return false;
+            return false;
+        }
+        else return true;
     }
 }
